@@ -11,4 +11,4 @@
 
     [] No de threads por parametro
     [] Init random ??
-    [] Máximo de interç?es
+    [] MÃ¡ximo de interÃ§Ãµes
