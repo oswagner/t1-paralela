@@ -37,11 +37,13 @@ void evolve(void *u, int w, int h)
     for_y for_x univ[y][x] = new[y][x];
 }
 
-void game(int w, int h)
+void game(int w, int h, int i)
 {
+    srand(666);
     unsigned univ[h][w];
     for_xy univ[y][x] = rand() < RAND_MAX / 10 ? 1 : 0;
-    while (1)
+    
+    for (int j=0; j < i; j++)
     {
         show(univ, w, h);
         evolve(univ, w, h);
@@ -51,14 +53,18 @@ void game(int w, int h)
 
 int main(int c, char **v)
 {
-    int w = 0, h = 0;
+    int w = 0, h = 0, i = 0;
     if (c > 1)
         w = atoi(v[1]);
     if (c > 2)
         h = atoi(v[2]);
+    if (c > 3)
+        i = atoi(v[3]);
     if (w <= 0)
         w = 30;
     if (h <= 0)
         h = 30;
-    game(w, h);
+    if (i <= 0)
+        i = 100;
+    game(w, h, i);
 }
