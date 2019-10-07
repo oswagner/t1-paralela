@@ -10,5 +10,3 @@
 # TODO
 
     [] No de threads por parametro
-    [] Init random ??
-    [] Máximo de interções
