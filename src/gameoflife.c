@@ -5,9 +5,8 @@
 #define for_x for (int x = 0; x < w; x++)
 #define for_y for (int y = 0; y < h; y++)
 #define for_xy for_x for_y
-void show(void *u, int w, int h)
+void show(int **univ, int w, int h)
 {
-    int(*univ)[w] = u;
     printf("\033[H");
     for_y
     {
@@ -17,12 +16,19 @@ void show(void *u, int w, int h)
     fflush(stdout);
 }
 
-void evolve(void *u, int w, int h)
+void evolve(int **univ, int w, int h)
 {
-    unsigned(*univ)[w] = u;
-    unsigned new[h][w];
 
-    for_y for_x
+    int **new = malloc(h * sizeof(*new));
+    for_x new[x] = malloc(w * sizeof(*new[x]));
+    for_y for_x new[y][x] = univ[y][x];
+
+    // omp_set_nested(1);
+
+    // #pragma omp parallel for
+    for_y 
+    // #pragma omp parallel for
+    for_x
     {
         int n = 0;
         for (int y1 = y - 1; y1 <= y + 1; y1++)
@@ -40,7 +46,10 @@ void evolve(void *u, int w, int h)
 void game(int w, int h, int i)
 {
     srand(666);
-    unsigned univ[h][w];
+
+    int **univ = malloc(h * sizeof(*univ));
+    for_y univ[y] = malloc(w * sizeof(*univ[y]));
+
     for_xy univ[y][x] = rand() < RAND_MAX / 10 ? 1 : 0;
     
     for (int j=0; j < i; j++)
@@ -49,6 +58,9 @@ void game(int w, int h, int i)
         evolve(univ, w, h);
         usleep(200000);
     }
+
+    for_y free(univ[y]);
+	free(univ);
 }
 
 int main(int c, char **v)
