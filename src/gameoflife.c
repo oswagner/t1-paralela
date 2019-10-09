@@ -51,13 +51,30 @@ void game(int w, int h, int i)
     for_y univ[y] = malloc(w * sizeof(*univ[y]));
 
     for_xy univ[y][x] = rand() < RAND_MAX / 10 ? 1 : 0;
+
+    // show(univ, w, h);
     
     for (int j=0; j < i; j++)
     {
-        show(univ, w, h);
         evolve(univ, w, h);
-        usleep(200000);
+        // show(univ, w, h);
+        // usleep(200000);
     }
+
+    FILE *fp;
+    fp = fopen("output.txt", "w+");
+    for_y
+    {
+        for_x
+        {
+            char str[12];
+            sprintf(str, "%d", univ[y][x]);
+            fputs(str, fp);
+            fputs(" ", fp);
+        }
+        fputs("\n", fp);
+    }
+    fclose(fp);
 
     for_y free(univ[y]);
 	free(univ);
@@ -73,9 +90,9 @@ int main(int c, char **v)
     if (c > 3)
         i = atoi(v[3]);
     if (w <= 0)
-        w = 30;
+        w = 1000;
     if (h <= 0)
-        h = 30;
+        h = 1000;
     if (i <= 0)
         i = 100;
     game(w, h, i);
