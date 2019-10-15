@@ -23,11 +23,11 @@ void evolve(int **univ, int w, int h)
     for_x new[x] = malloc(w * sizeof(*new[x]));
     for_y for_x new[y][x] = univ[y][x];
 
-    // omp_set_nested(1);
+    omp_set_nested(1);
 
-    // #pragma omp parallel for
+    #pragma omp parallel for
     for_y 
-    // #pragma omp parallel for
+    #pragma omp parallel for
     for_x
     {
         int n = 0;
@@ -51,15 +51,9 @@ void game(int w, int h, int i)
     for_y univ[y] = malloc(w * sizeof(*univ[y]));
 
     for_xy univ[y][x] = rand() < RAND_MAX / 10 ? 1 : 0;
-
-    // show(univ, w, h);
     
     for (int j=0; j < i; j++)
-    {
         evolve(univ, w, h);
-        // show(univ, w, h);
-        // usleep(200000);
-    }
 
     FILE *fp;
     fp = fopen("output.txt", "w+");
@@ -89,6 +83,8 @@ int main(int c, char **v)
         h = atoi(v[2]);
     if (c > 3)
         i = atoi(v[3]);
+    if (c > 4 && atoi(v[4]) >= 1 && atoi(v[4]) <= omp_get_max_threads())
+	    omp_set_num_threads(atoi(v[4]));
     if (w <= 0)
         w = 1000;
     if (h <= 0)
