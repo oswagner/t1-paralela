@@ -23,12 +23,8 @@ void evolve(int **univ, int w, int h)
     for_x new[x] = malloc(w * sizeof(*new[x]));
     for_y for_x new[y][x] = univ[y][x];
 
-    omp_set_nested(1);
-
-    #pragma omp parallel for
-    for_y 
-    #pragma omp parallel for
-    for_x
+    #pragma omp parallel for collapse(2)
+    for_y for_x
     {
         int n = 0;
         for (int y1 = y - 1; y1 <= y + 1; y1++)
@@ -76,6 +72,7 @@ void game(int w, int h, int i)
 
 int main(int c, char **v)
 {
+    printf("Threads available: %d\n", omp_get_max_threads());
     int w = 0, h = 0, i = 0;
     if (c > 1)
         w = atoi(v[1]);
